@@ -3,7 +3,7 @@ package ua.yandex.prioritymap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class SortedList<K extends Comparable>{
+public class SortedList<K extends Comparable> implements Iterable<Comparable>{
     private Node<K> head;
 
     static private class Node<K> {
@@ -58,25 +58,29 @@ public class SortedList<K extends Comparable>{
         }
         return buf.toString();
     }
-     
-    public Iterator<K> iterator() { 
-        return new MyIterator(); 
+
+        @Override
+    public Iterator<Comparable> iterator() {
+         return new MyIterator(); 
     }
-   class MyIterator implements Iterator{
+    public Iterator<K> iteratorK() {
+         return new MyIterator(); 
+    }
+   class MyIterator<K> implements Iterator<K>{
        private Node headIterator;
        public MyIterator(){
            headIterator = head;
        }
         @Override
         public boolean hasNext() {
-           return head!=null;
+           return (headIterator!=null);
         }
         @Override
         public K next() {
             if (!hasNext()) throw new NoSuchElementException();
-            Node temp = headIterator;
+            Node<K> temp = headIterator;
             headIterator = headIterator.next;
-            return (K) temp.data;
+            return  temp.data;
         }
        
    }

@@ -109,8 +109,8 @@ public class MyPriorityHashMapTest {
         map.put(key1, value1);
         String result = "";
         for (Map.Entry<Integer, Integer> e: map) {
-            System.out.println(e.getKey() + ": " + e.getValue());
-            result+= e.getKey() + ": " + e.getValue() + " ";
+            System.out.println(e.getKey() + ":" + e.getValue());
+            result+= e.getKey() + ":" + e.getValue() + " ";
         }
         String expResult = "100:7 12:6 ";
         assertEquals(expResult, result);

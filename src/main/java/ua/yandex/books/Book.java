@@ -4,33 +4,35 @@
  * and open the template in the editor.
  */
 package ua.yandex.books;
+
 import java.util.LinkedList;
 import java.util.List;
+
 /**
  *
  * @author Ольга
  */
-
-enum Topic {
-
-    COMPUTING, FANTASY, CLASSICS, FICTION
-}
-
 public class Book {
+
+    public enum Topic {
+        COMPUTING, FANTASY, CLASSICS, FICTION;
+    }
     String title;
     List<String> authors;
     int yearOfPublising;
     Topic topic;
-    public Book(String name, List<String> a, int year, Topic t){
+
+    public Book(String name, List<String> authors, int year, Topic t) {
         title = name;
-        authors = a;
+        this.authors = authors;
         yearOfPublising = year;
         topic = t;
     }
-    public Book(String name, String a, int year, Topic t){
+
+    public Book(String name, String author, int year, Topic t) {
         title = name;
         List list = new LinkedList();
-        list.add(a);
+        list.add(author);
         authors = list;
         yearOfPublising = year;
         topic = t;

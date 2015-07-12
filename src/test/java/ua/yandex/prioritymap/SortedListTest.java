@@ -5,6 +5,7 @@
  */
 package ua.yandex.prioritymap;
 
+import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -90,5 +91,22 @@ public class SortedListTest {
         Integer result = instance.getFirst();
         assertEquals(expResult, result);
     }
-    
+        @Test
+        public void testIterator() {
+        System.out.println("iterator");   
+        Integer e1 = 1;
+        Integer e2 = 5;
+        Integer e3 = 2;
+        SortedList <Integer> instance = new SortedList<> () ;
+        instance.add(e1);
+        instance.add(e2);
+        instance.add(e3);
+        String result = "";
+        for (Comparable e: instance) {
+            System.out.println(e);
+            result+= e + " ";
+        }
+        String expResult = "5 2 1 ";
+        assertEquals(expResult, result);
+    }
 }

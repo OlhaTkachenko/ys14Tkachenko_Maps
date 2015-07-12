@@ -12,96 +12,80 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import javafx.util.Pair;
+import ua.yandex.books.Book.Topic;
 
 /**
  *
  * @author Ольга
  */
 public class WorkWithListOfBooks {
-    public static Map<String, List<Book>> groupBooksByAuthors(List<Book> books) { 
-        Map <String, List<Book>> map = new HashMap<>();
+
+    public static Map<String, List<Book>> groupBooksByAuthors(List<Book> books) {
+        Map<String, List<Book>> map = new HashMap<>();
         for (Book book : books) {
-            for(String author : book.authors){
-                if(!map.containsKey(author)){
-                   List<Book> list = new LinkedList<>();
-                   list.add(book);
-                   map.put(author, list);
+            for (String author : book.authors) {
+                if (!map.containsKey(author)) {
+                    List<Book> list = new LinkedList<>();
+                    list.add(book);
+                    map.put(author, list);
+                } else {
+                    map.get(author).add(book);
                 }
-                else map.get(author).add(book);
             }
         }
-      return map;        
+        return map;
     }
+
     public static Map<Integer, Set<String>> findTopAuthorsPerEachYear(List<Book> books) {
         Map<Integer, Set<String>> result = new HashMap<>();
-        Map<String, List<Book>> booksByA = groupBooksByAuthors(books); 
-        for(Book book : books){
+        Map<String, List<Book>> booksByA = groupBooksByAuthors(books);
+        for (Book book : books) {
             int year = book.yearOfPublising;
-            if(!result.containsKey(year)){
+            if (!result.containsKey(year)) {
                 Set<String> more = new HashSet();
                 int amount = 0;
-                for(String now : booksByA.keySet()){
-                   int temp = 0;
-                   List <Book>list = booksByA.get(now);
+                for (String now : booksByA.keySet()) {
+                    int temp = 0;
+                    List<Book> list = booksByA.get(now);
                     for (Book oneA : list) {
-                        if(oneA.yearOfPublising == year) temp++;
+                        if (oneA.yearOfPublising == year) {
+                            temp++;
+                        }
                     }
-                    if(temp > amount){
+                    if (temp > amount) {
                         amount = temp;
                         more.clear();
                         more.add(now);
-                    }
-                    else if(temp == amount){
+                    } else if (temp == amount) {
                         more.add(now);
-                    }                   
+                    }
                 }
                 result.put(year, more);
             }
-        }       
+        }
         return result;
     }
-    public static Set<Pair<Topic,List<String>>> findTopicsWithTheMostNumberOfBooks(List<Book> books) {      
-      int   computing = 0, fantasy = 0, classics = 0, fiction = 0;
-      Set <Pair<Topic,List<String>>> result = new HashSet<>();
-      List<String> computingList = new LinkedList(), fantasyList = new LinkedList(), 
-              classicsList = new LinkedList(), fictionList = new LinkedList();
-      for(Book book :books ){
-          switch(book.topic){
-              case COMPUTING:
-                  computing++;
-                  computingList.add(book.title);
-                  break;
-              case FANTASY:
-                  fantasy++;
-                  fantasyList.add(book.title);
-                  break;
-              case CLASSICS:
-                  classics++;
-                  classicsList.add(book.title);
-                  break;
-              case FICTION:
-                  fiction++;
-                  fictionList.add(book.title);
-                  break;
-              default:
-                  throw new AssertionError(book.topic.name()); 
-          }
+
+    public static Set<Pair<Topic, List<String>>> findTopicsWithTheMostNumberOfBooks(List<Book> books) {
+        Map<Topic, List<String>> topics = new HashMap<>();
+        Set<Pair<Topic, List<String>>> result = new HashSet<>();
+        for (Book book : books) {
+            if (!topics.containsKey(book.topic)) {
+                topics.put(book.topic, new LinkedList<String>());
+            }
+            topics.get(book.topic).add(book.title);
         }
-      int max = Math.max( Math.max(classics, computing),Math.max(fantasy, fiction) );
-      if(max == computing){
-          result.add(new Pair(Topic.COMPUTING, computingList));
-      }
-      if(max == fantasy){
-          result.add(new Pair(Topic.FANTASY, fantasyList));
-      }
-      if(max == classics){
-          result.add(new Pair(Topic.CLASSICS, classicsList));
-      }
-      if(max == fiction){
-          result.add(new Pair(Topic.FICTION, fictionList));
-      }
-      return result;
+        int max = 0;
+        for (Map.Entry<Topic, List<String>> now : topics.entrySet()) {
+            if (now.getValue().size() > max) {
+                max = now.getValue().size();
+            }
+        }
+        for (Map.Entry<Topic, List<String>> now : topics.entrySet()) {
+            if (now.getValue().size() == max) {
+                result.add(new Pair(now.getKey(), now.getValue()));
+            }
+        }
+        return result;
     }
-
 }
-
